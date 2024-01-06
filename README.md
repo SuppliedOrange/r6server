@@ -3,7 +3,7 @@
  <br>
  Just a silly little tool I made to change the r6s server for my friends and I. It speeds up my process. 
 
-![Alt text](image.png)
+![Screenshot of the application running in a terminal](readme_images/image.png)
 
 # How to use
 Start the .exe and choose the server you want to use.
