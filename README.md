@@ -22,4 +22,4 @@ PyInstaller Command:
 pyinstaller r6server.py -F -n "R6 Server Changer" -i "favicon.ico"
 ```
 <br>
-You should see it in `/dist`` after it's completed.
+You should see it in `./dist` after it's completed.
