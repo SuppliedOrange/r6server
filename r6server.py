@@ -1,8 +1,8 @@
 # Imports
 from consolemenu.format import *
-from r6server.modified_console_menu.menu_borders import MenuBorderStyleType as CustomBorderStyleType
-from r6server.modified_console_menu.console_menu import *
-from r6server.modified_console_menu.function_item import FunctionItem
+from modified_console_menu.menu_borders import MenuBorderStyleType as CustomBorderStyleType
+from modified_console_menu.console_menu import *
+from modified_console_menu.function_item import FunctionItem
 from colors import color, strip_color
 from os import listdir, path, startfile
 import re
