@@ -161,3 +161,4 @@ cython_debug/
 
 build/
 dist/
+alt_r6server.py
