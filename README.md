@@ -13,11 +13,8 @@ Download the .exe from https://github.com/SuppliedOrange/r6server/releases/tag/l
 
 # How to use
 - Start the .exe and choose the server you want to use.
-<br>
 - Select your Ubisoft ID incase you have multiple.
-<br>
 - You may choose to make the app automatically start siege.
-<br>
 - It's recommend you change and customize the constants like your Ubisoft ID and R6S Path to speed up the app's process even more.
 
 # Running as python
