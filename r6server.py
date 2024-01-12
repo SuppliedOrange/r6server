@@ -21,7 +21,7 @@ NAME_ASCII = f"""
 ░░░░░░░░░░    ░░░░░░   ░░░░░░   ░░░░░███    ░░░░░░  
                                 ███ ░███            
                                ░░██████             
-                                ░░░░░░ 
+                                ░░░░░░              
 
     {color("R6S", fg="dodgerblue")}  {color("Server Changer", fg="lightsteelblue")}
 """
@@ -46,6 +46,7 @@ SERVER_LIST = {
 
 UUID = "" # Enter your ubisoft connect id if you know it. (located as a folder in C:\Users\(your name)\Documents\My Games\Rainbow Six - Siege)
 R6SPATH = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Tom Clancy\'s Rainbow Six Siege\\RainbowSix.exe" # Replace with your R6S path
+SETTINGS_PATH = "" # Enter your R6S settings file path if you know it. Defaults to {UserProfile}/Documents/My Games/Rainbow Six - Siege/
 START_R6S = False # Asks if you want to start r6s after changing your server.
 
 
@@ -143,7 +144,6 @@ def pickUbisoftID(settingsDir, server):
 
 def startR6(): 
         try: # Attempt to start r6s
-
             if START_R6S:
                 input(color("> Press enter to start Rainbow Six Siege or close this window.\n", fg="blue"))
                 startfile(R6SPATH) # Does not start with vulkan- If you want vulkan, change R6SPATH executable to RainbowSix_Vulkan.exe + You will also need to change the drive folder to wherever you have steam installed.
@@ -156,15 +156,22 @@ def applyColor(item_number):
         return list(SERVER_LIST.values())[item_number - 1]
     except IndexError:
         return random.choice( list(SERVER_LIST.values()) )
-
+    
 def findConfigFile(server:str):
 
-    settingsDir = path.expanduser('~') + r"\Documents\My Games\Rainbow Six - Siege" # this is where the folders of each account's ubisoft uuid are stored as a directory. inside them, are the config folders
+    if not SETTINGS_PATH:
+        settingsDir = path.expanduser('~') + r"\Documents\My Games\Rainbow Six - Siege" # this is where the folders of each account's ubisoft uuid are stored as a directory. inside them, are the config folders
 
-    if not path.exists(settingsDir):
-        print(f"Error: {settingsDir} does not exist")
-        input()
-        exit(1)
+        if not path.exists(settingsDir): # If the path does not exist, it's probably stored in OneDrive?
+            settingsDir = path.expanduser('~') +  r"OneDrive\Documents\My Games\Rainbow Six - Siege"
+        
+        if not path.exists(settingsDir): # If the path still does not exist, that's a problem
+            print(f"Error: {settingsDir} (both onedrive and standard paths) and do not exist")
+            input()
+            exit(1)
+            
+    else:
+        settingsDir = SETTINGS_PATH
 
     if not UUID: # If there's no preset UUID
 
