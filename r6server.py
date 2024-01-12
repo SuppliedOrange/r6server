@@ -163,7 +163,7 @@ def findConfigFile(server:str):
         settingsDir = path.expanduser('~') + r"\Documents\My Games\Rainbow Six - Siege" # this is where the folders of each account's ubisoft uuid are stored as a directory. inside them, are the config folders
 
         if not path.exists(settingsDir): # If the path does not exist, it's probably stored in OneDrive?
-            settingsDir = path.expanduser('~') +  r"OneDrive\Documents\My Games\Rainbow Six - Siege"
+            settingsDir = path.expanduser('~') +  r"\OneDrive\Documents\My Games\Rainbow Six - Siege"
         
         if not path.exists(settingsDir): # If the path still does not exist, that's a problem
             print(f"Error: {settingsDir} (both onedrive and standard paths) and do not exist")
