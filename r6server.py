@@ -166,7 +166,7 @@ def findConfigFile(server:str):
             settingsDir = path.expanduser('~') +  r"\OneDrive\Documents\My Games\Rainbow Six - Siege"
         
         if not path.exists(settingsDir): # If the path still does not exist, that's a problem
-            print(f"Error: {path.expanduser('~') + r"\Documents\My Games\Rainbow Six - Siege"} (both onedrive and standard paths) do not exist")
+            print(f"Error: {path.expanduser('~') + r"\Documents\My Games\Rainbow Six - Siege"} (both onedrive and standard paths do not exist")
             input()
             exit(1)
             
