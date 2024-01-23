@@ -1,8 +1,7 @@
 # Imports
 import random
-from consolemenu.format import *
-from modified_console_menu.menu_borders import MenuBorderStyleType as CustomBorderStyleType
-from modified_console_menu.console_menu import *
+from modified_console_menu.menu_borders import MenuBorderStyleType
+from modified_console_menu.console_menu import ConsoleMenu, MenuFormatBuilder
 from modified_console_menu.function_item import FunctionItem
 from colors import color
 from os import listdir, path, startfile
@@ -145,7 +144,7 @@ def generateUbisoftIDOptions(settingsDir, server):
 def pickUbisoftID(settingsDir, server):
     
     menu_format = MenuFormatBuilder()
-    menu_format.set_border_style_type(CustomBorderStyleType.ZERO_BORDER)
+    menu_format.set_border_style_type(MenuBorderStyleType.ZERO_BORDER)
     menu_format.set_subtitle_align('centre')
 
     menu = ConsoleMenu (
@@ -253,7 +252,7 @@ def generateServerOptions():
 def main():
 
     menu_format = MenuFormatBuilder()
-    menu_format.set_border_style_type(CustomBorderStyleType.ZERO_BORDER)
+    menu_format.set_border_style_type(MenuBorderStyleType.ZERO_BORDER)
     menu_format.set_subtitle_align('centre')
 
     # Create the menu
