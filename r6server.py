@@ -44,10 +44,17 @@ SERVER_LIST = {
     "playfab/westus": "darksalmon"
 }
 
-UUID = "" # Enter your ubisoft connect id if you know it. (located as a folder in C:\Users\(your name)\Documents\My Games\Rainbow Six - Siege)
-R6SPATH = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Tom Clancy\'s Rainbow Six Siege\\RainbowSix.exe" # Replace with your R6S path
-SETTINGS_PATH = "" # Enter your R6S settings file path if you know it. Defaults to {UserProfile}/Documents/My Games/Rainbow Six - Siege/
-START_R6S = False # Asks if you want to start r6s after changing your server.
+# Enter your ubisoft connect id if you know it. (located as a folder in C:\Users\(your name)\Documents\My Games\Rainbow Six - Siege), probably. Also check your onedrive.
+UUID = ""
+
+# Replace with your R6S path
+R6SPATH = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Tom Clancy\'s Rainbow Six Siege\\RainbowSix.exe" 
+
+# Enter your R6S settings file path if you know it. Defaults to {UserProfile}/Documents/My Games/Rainbow Six - Siege/
+SETTINGS_PATH = "" 
+
+# Asks if you want to start r6s after changing your server.
+START_R6S = False 
 
 
 # Functions
@@ -81,10 +88,13 @@ def switchServer(configPath, server):
 def getUbisoftIds(directory_path):
 
     ubi_id_dirs = []
-    uuid_pattern = re.compile(r'\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b') # all ubi ids are UUIDs, so we regex search the folders with UUID patterns.
+
+    # All ubisoft ids are UUIDs, so we regex search the folders with UUID patterns.
+    uuid_pattern = re.compile(r'\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b')
+
     all_items = listdir(directory_path)
 
-    # Get all items in the dir
+    # Get all items in the directory
     for item in all_items:
         item_path = path.join(directory_path, item)
 
@@ -94,6 +104,17 @@ def getUbisoftIds(directory_path):
 
     return ubi_id_dirs
 
+def makeSeparatorWithPadding(separator, item_number, item_list):
+
+        separator = separator.rjust( 
+            len( str(len(item_list)) ) - len( str(item_number) ) + 2
+            # Length of the stringified of the biggest number in the item list - Length of the stringified version of the item number + 2 (To add space after calculations)
+            # For example, 12 items in a list, String of that is '12', Length of that is 2.
+        )
+        
+        separator = separator.ljust( len(separator) + 1 )
+
+        return separator
 
 def generateUbisoftIDOptions(settingsDir, server):
 
@@ -105,17 +126,9 @@ def generateUbisoftIDOptions(settingsDir, server):
         # Find each option's index number
         item_number = ubiIds.index(ubiId) + 1
 
-        # Making a separator with padding
-        separator = "|"
-
-        separator = separator.rjust( 
-            ( len( str( len(ubiIds) ) ) + 1 ) - ( len( str( item_number ) ) ) + 1
-        )
-        
-        separator = separator.ljust( len(separator) + 1 )
+        separator = makeSeparatorWithPadding("|", item_number, ubiIds)
                 
-        try: id_name = color(ubiId, applyColor(item_number))
-        except IndexError: id_name = color(ubiId, applyColor(item_number) )
+        id_name = color(ubiId, applyColor(item_number))
 
         configPath = settingsDir + rf"\{ubiId}\GameSettings.ini"
     
@@ -135,7 +148,11 @@ def pickUbisoftID(settingsDir, server):
     menu_format.set_border_style_type(CustomBorderStyleType.ZERO_BORDER)
     menu_format.set_subtitle_align('centre')
 
-    menu = ConsoleMenu(NAME_ASCII, f"You have multiple accounts with R6S. Choose the UUID of the account you want.\nThis is located in {settingsDir}", show_exit_option=False, formatter=menu_format)
+    menu = ConsoleMenu (
+        NAME_ASCII,
+        f"You have multiple accounts with R6S. Choose the UUID of the account you want.\nThis is located in {settingsDir}",
+        show_exit_option=False, formatter=menu_format
+    )
 
     for option in generateUbisoftIDOptions(settingsDir, server):
         menu.append_item(option)
@@ -146,7 +163,9 @@ def startR6():
         try: # Attempt to start r6s
             if START_R6S:
                 input(color("> Press enter to start Rainbow Six Siege or close this window.\n", fg="blue"))
-                startfile(R6SPATH) # Does not start with vulkan- If you want vulkan, change R6SPATH executable to RainbowSix_Vulkan.exe + You will also need to change the drive folder to wherever you have steam installed.
+                startfile(R6SPATH)
+                # Does not start with vulkan- If you want vulkan, change R6SPATH executable to RainbowSix_Vulkan.exe
+                # You will also need to change the drive folder to wherever you have steam installed.
             else:
                 input()
         except: print("Siege failed to start. Is your executable path correct? Ignore this if you didn't want to start siege.")
@@ -160,13 +179,18 @@ def applyColor(item_number):
 def findConfigFile(server:str):
 
     if not SETTINGS_PATH:
-        settingsDir = path.expanduser('~') + r"\Documents\My Games\Rainbow Six - Siege" # this is where the folders of each account's ubisoft uuid are stored as a directory. inside them, are the config folders
+
+        # This is where the folders of each account's ubisoft uuid are stored as a directory. inside them, are the config folders. A OneDrive alternative is also included just in case.
+        standard_path = r"\Documents\My Games\Rainbow Six - Siege" 
+        onedrive_path = r"\OneDrive\Documents\My Games\Rainbow Six - Siege"
+
+        settingsDir = path.expanduser('~') + standard_path 
 
         if not path.exists(settingsDir): # If the path does not exist, it's probably stored in OneDrive?
-            settingsDir = path.expanduser('~') +  r"\OneDrive\Documents\My Games\Rainbow Six - Siege"
+            settingsDir = path.expanduser('~') +  onedrive_path
         
         if not path.exists(settingsDir): # If the path still does not exist, that's a problem
-            print(f"Error: {path.expanduser('~') + r"\Documents\My Games\Rainbow Six - Siege"} (both onedrive and standard paths do not exist")
+            print(f"Error: {path.expanduser('~') + standard_path} (and the onedrive counterpart) does not exist.")
             input()
             exit(1)
             
@@ -207,13 +231,8 @@ def generateServerOptions():
         item_number =list( SERVER_LIST.keys()).index(server) + 1
 
         # Making a separator with padding
-        separator = "|"
 
-        separator = separator.rjust( 
-            ( len( str( len(SERVER_LIST) ) ) + 1 ) - ( len( str( item_number ) ) ) + 1
-        )
-        
-        separator = separator.ljust( len(separator) + 1 )
+        separator = makeSeparatorWithPadding("|", item_number, SERVER_LIST)
 
         # crop and color the server names
         server_name = server[8:] if server != "default" else server
@@ -229,6 +248,8 @@ def generateServerOptions():
 
     return serverOptions
 
+# Main function
+
 def main():
 
     menu_format = MenuFormatBuilder()
@@ -236,7 +257,10 @@ def main():
     menu_format.set_subtitle_align('centre')
 
     # Create the menu
-    menu = ConsoleMenu(NAME_ASCII, "Select a server with it's number", show_exit_option=False, formatter=menu_format)
+    menu = ConsoleMenu (
+        NAME_ASCII, "Select a server with it's number",
+        show_exit_option=False, formatter=menu_format
+    )
 
     # Add all the servers to the menu
     for option in generateServerOptions():
@@ -248,6 +272,10 @@ def main():
 if __name__ == "__main__":
     main()
 
-    # For those who wish to navigate this mess of a code voluntarily,
-    # main (gets options from generateServerOptions) -> sends option to findConfigFile -> Sends option either directly to switchServer or pickUbisoftId depending on whether there are many ubisoft IDs or not
-    # pickUbisoftId (gets options from generateUbisoftIdOptions) -> Sends option to switchServer
+"""
+A little map of how things work:
+> main (gets options from generateServerOptions) -> sends selected option to findConfigFile
+> findConfigFile -> Sends selected option and the config file either directly to switchServer or pickUbisoftId depending on whether there are many ubisoft IDs logged in the system or not
+> pickUbisoftId (gets options from generateUbisoftIdOptions) -> Sends selected option to switchServer
+> switchServer ends the process.
+"""
